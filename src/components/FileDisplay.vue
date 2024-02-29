@@ -14,10 +14,11 @@ let props = defineProps<{
     <button @click="expanded = !expanded">Toggle</button>
     <div v-if="expanded">
         <p v-for="line in props.report.lines" :key="line.content">
-            <span class="whitespace-pre"
+          {{ line.number }}  
+          <span class="whitespace-pre"
                 :class="{
-                    'bg-red-300': line.coverage == 'Uncovered',
-                    'bg-green-300': line.coverage == 'Covered',
+                    'bg-red-300': line.coverage === 'uncovered',
+                    'bg-green-300': line.coverage === 'covered',
                 }"
                 >{{ line.content }}</span
             >

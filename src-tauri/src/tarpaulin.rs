@@ -3,6 +3,7 @@ use std::path::PathBuf;
 
 #[derive(Serialize)]
 #[cfg_attr(test, derive(Debug, PartialEq))]
+#[serde(rename_all = "lowercase")]
 pub enum LineCoverage {
     Covered,
     Uncovered,
@@ -25,6 +26,7 @@ pub struct SimpleFileReport {
 
 #[derive(Serialize)]
 pub struct Line {
+    pub number: u32,
     pub content: String,
     pub coverage: LineCoverage,
 }
@@ -53,6 +55,7 @@ impl From<Report> for SimpleReport {
                     None => LineCoverage::Ignored,
                 };
                 lines.push(Line {
+                    number: i as u32 + 1,
                     content: line.to_string(),
                     coverage,
                 });

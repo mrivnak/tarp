@@ -1,4 +1,5 @@
 export interface Line {
+    number: number;
     content: string;
     coverage: "covered" | "uncovered" | "ignored";
 }
