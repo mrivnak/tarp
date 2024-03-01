@@ -3,7 +3,7 @@ $version = $args[0].replace("v", "")
 $files = @(
     "./package.json",
     "./src-tauri/tauri.conf.json",
-    "./src-tauri/Cargo.toml",
+    "./src-tauri/Cargo.toml"
 )
 
 foreach ($file in $files) {
