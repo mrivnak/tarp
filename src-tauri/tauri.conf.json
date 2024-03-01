@@ -22,9 +22,9 @@
     },
     "windows": [
       {
-        "title": "tarp",
-        "width": 1920,
-        "height": 1080
+        "title": "Tarp",
+        "width": 1280,
+        "height": 720
       }
     ],
     "security": {
@@ -33,7 +33,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.tauri.dev",
+      "identifier": "org.rivnakm.tarp",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
