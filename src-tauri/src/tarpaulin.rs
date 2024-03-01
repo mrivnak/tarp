@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 #[derive(Serialize)]
 #[cfg_attr(test, derive(Debug, PartialEq))]
@@ -106,7 +106,7 @@ pub struct Stats {
 }
 
 pub fn run_tarpaulin(path: &PathBuf) -> Result<Report, anyhow::Error> {
-    let output_path = get_output_path()?;
+    let output_path = get_output_path(path)?;
     let mut proc = std::process::Command::new("cargo")
         .args([
             "tarpaulin",
@@ -124,12 +124,17 @@ pub fn run_tarpaulin(path: &PathBuf) -> Result<Report, anyhow::Error> {
     }
 
     let report_json = std::fs::read_to_string(output_path.join("tarpaulin-report.json"))?;
+
+    // Windows doesn't clean temp automatically, so we need to do it manually
+    #[cfg(windows)]
+    std::fs::remove_dir_all(&output_path)?;
+
     serde_json::from_str(&report_json).map_err(Into::into)
 }
 
-pub fn get_output_path() -> Result<PathBuf, anyhow::Error> {
+pub fn get_output_path(project_path: &Path) -> Result<PathBuf, anyhow::Error> {
     let temp_dir = std::env::temp_dir();
-    let output_dir = temp_dir.join(format!("tarpaulin-{}", uuid::Uuid::new_v4()));
+    let output_dir = temp_dir.join(format!("tarpaulin-{}", uuid::Uuid::new_v5(&uuid::Uuid::NAMESPACE_URL, project_path.to_string_lossy().as_bytes())));
     std::fs::create_dir(&output_dir)?;
     Ok(output_dir)
 }
@@ -140,7 +145,7 @@ mod tests {
 
     #[test]
     fn test_get_output_path() {
-        let result = get_output_path().unwrap();
+        let result = get_output_path(PathBuf::from("/tmp/something").as_path()).unwrap();
         assert!(result
             .into_os_string()
             .into_string()
