@@ -1,4 +1,4 @@
-name: Cargo Check
+name: Build Release
 
 on:
   push:
