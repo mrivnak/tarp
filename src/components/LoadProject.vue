@@ -17,7 +17,7 @@ async function load() {
 <template>
   <div class="flex justify-center items-center h-full">
     <div class="flex flex-col">
-      <h1 class="text-bold">To get started, open a cargo project.</h1>
+      <h1 class="text-bold text-2xl m-4">To get started, open a cargo project.</h1>
       <div class="w-full flex justify-center">
         <button
           class="shrink py-1 px-2 border border-neutral-600 rounded-lg"
