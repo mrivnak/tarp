@@ -135,7 +135,10 @@ pub fn run_tarpaulin(path: &PathBuf) -> Result<Report, anyhow::Error> {
 pub fn get_output_path(project_path: &Path) -> Result<PathBuf, anyhow::Error> {
     let temp_dir = std::env::temp_dir();
     let output_dir = temp_dir.join(format!("tarpaulin-{}", uuid::Uuid::new_v5(&uuid::Uuid::NAMESPACE_URL, project_path.to_string_lossy().as_bytes())));
-    std::fs::create_dir(&output_dir)?;
+
+    if !output_dir.exists() {
+        std::fs::create_dir(&output_dir)?;
+    }
     Ok(output_dir)
 }
 
