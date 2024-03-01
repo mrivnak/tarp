@@ -11,6 +11,8 @@ jobs:
       fail-fast: false
       matrix:
         platform: [ubuntu-latest, macos-latest, windows-latest]
+    permissions:
+      contents: write
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout
