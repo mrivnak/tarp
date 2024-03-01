@@ -4,8 +4,7 @@
 </script>
 
 <template>
-  <div class="container">
+  <div class="bg-neutral-800 text-neutral-200 h-screen">
     <router-view />
   </div>
 </template>
-
