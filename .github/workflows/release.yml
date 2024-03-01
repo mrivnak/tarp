@@ -72,5 +72,9 @@ jobs:
           files: |
             ./src-tauri/release/bundle/deb/*.deb
             ./src-tauri/release/bundle/appimage/*.AppImage
+            ./src-tauri/release/bundle/macos/*.app
+            ./src-tauri/release/bundle/dmg/*.dmg
+            ./src-tauri/release/bundle/msi/*.msi
+            ./src-tauri/release/bundle/nsis/*.exe
           name: Release ${{ github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
