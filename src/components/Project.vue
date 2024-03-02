@@ -15,10 +15,10 @@ const loading = ref(false)
 
 async function run() {
   loading.value = true;
-  report.value = null;
 
   let result: SimpleReport | null = await invoke("run_tarpaulin", {})
   if (result) {
+    report.value = null;
     report.value = result;
   }
 
