@@ -109,6 +109,12 @@ pub struct Stats {
 
 pub fn run_tarpaulin(path: &PathBuf) -> Result<Report, anyhow::Error> {
     let output_path = get_output_path(path)?;
+    let report_filename = output_path.join("tarpaulin-report.json");
+
+    if report_filename.exists() {
+        std::fs::remove_file(&report_filename)?;
+    }
+
     let mut proc = std::process::Command::new("cargo")
         .args([
             "tarpaulin",
@@ -125,7 +131,7 @@ pub fn run_tarpaulin(path: &PathBuf) -> Result<Report, anyhow::Error> {
         return Err(anyhow::anyhow!("Tarpaulin failed"));
     }
 
-    let report_json = std::fs::read_to_string(output_path.join("tarpaulin-report.json"))?;
+    let report_json = std::fs::read_to_string(report_filename)?;
 
     // Windows doesn't clean temp automatically, so we need to do it manually
     #[cfg(windows)]
