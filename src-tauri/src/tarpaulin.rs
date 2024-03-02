@@ -1,8 +1,9 @@
+use std::collections::BTreeMap;
 use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 
-#[derive(Serialize)]
-#[cfg_attr(test, derive(Debug, PartialEq))]
+#[derive(Debug, Serialize)]
+#[cfg_attr(test, derive(PartialEq))]
 #[serde(rename_all = "lowercase")]
 pub enum LineCoverage {
     Covered,
@@ -10,13 +11,13 @@ pub enum LineCoverage {
     Ignored,
 }
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize)]
 pub struct SimpleReport {
     pub files: Vec<SimpleFileReport>,
     pub coverage: f32,
 }
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize)]
 pub struct SimpleFileReport {
     pub path: PathBuf,
     pub lines: Vec<Line>,
@@ -24,7 +25,7 @@ pub struct SimpleFileReport {
     pub coverable: u32,
 }
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize)]
 pub struct Line {
     pub number: u32,
     pub content: String,
@@ -41,12 +42,13 @@ impl From<Report> for SimpleReport {
             coverable += file.coverable;
             covered += file.covered;
 
+            let line_traces = file.traces.iter().map(|trace| (trace.line, trace.stats.line)).collect::<BTreeMap<u32, u32>>();
+
             let mut lines = Vec::new();
             for (i, line) in file.content.lines().enumerate() {
-                let coverage = match file.traces.iter().find(|trace| trace.line == i as u32 + 1) {
-                    // TODO: this is slow
+                let coverage = match line_traces.get(&(i as u32 + 1)) {
                     Some(trace) => {
-                        if trace.stats.line > 0 {
+                        if *trace > 0 {
                             LineCoverage::Covered
                         } else {
                             LineCoverage::Uncovered
